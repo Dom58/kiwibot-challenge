@@ -1,0 +1,45 @@
+{
+  "name": "challenge_kiwibot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dom58/kiwibot-challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Dom58/kiwibot-challenge/issues"
+  },
+  "homepage": "https://github.com/Dom58/kiwibot-challenge#readme",
+  "dependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/node": "^7.16.8",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/register": "^7.17.7",
+    "babel-node": "^0.0.1-security",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "firebase": "^9.6.9",
+    "firebase-admin": "^10.0.2",
+    "path": "^0.12.7",
+    "slug": "^5.3.0",
+    "uuid": "^8.3.2",
+    "uuidv4": "^6.2.12"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

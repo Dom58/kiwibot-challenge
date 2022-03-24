@@ -1,0 +1,61 @@
+.navbar {
+    height: 77px;
+    z-index: 10;
+    background: transparent !important;
+    transition: all .4s ease-in;
+}
+.navbar .navbar-brand {
+    color: #ffffff;
+}
+
+.navbar .navbar-brand .img-fluid {
+    width: 100px;
+}
+
+.navbar.scrool {
+    background-color: #121f3e !important;
+    background-image: linear-gradient(328deg, #0366f7, #2f2775 76%, #341f65) !important;
+    transition: all .4s ease-out;
+    -webkit-box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.08);
+    z-index: 1001;
+}
+
+.navbar .nav-item .nav-link {
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff !important;
+    padding: 0 15px;
+}
+
+.navbar.scrool .nav-item .nav-link {
+    color: white !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+}
+
+.nav-link small:hover, .nav-link small:active {
+    color: #dddbdb;
+    text-decoration: underline;
+}
+
+.navbar.scrool .navbar-brand {
+    color: #62646a;
+}
+
+@media screen and (max-width: 768px){
+    .navbar-collapse {
+        background-color: #fff !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        padding-bottom: 10px !important;
+        -webkit-box-shadow: 0px 10px 13px 0px rgba(0, 0, 0, 0.08) !important;
+        -moz-box-shadow: 0px 10px 13px 0px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0px 10px 13px 0px rgba(0, 0, 0, 0.08) !important;
+    }
+    .navbar .nav-item .nav-link {
+        padding: 10px 20px !important;
+        color: #000 !important;
+    }
+}
