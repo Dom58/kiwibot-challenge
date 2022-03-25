@@ -48,7 +48,7 @@ const Delivery = () => {
         dropoff_lat: 0.0,
         dropoff_lon: 0.0
     });
-    const [filterValue, setFilterValue] = useState('');
+    const [filterValue, setFilterValue] = useState(null);
     const [botValue, setBotValue] = useState({ 
         botId: '',
     });
@@ -207,11 +207,6 @@ const Delivery = () => {
         setSortingOrder(order);
     }
 
-    const handleFilterChange = (text) => {
-        setFilterValue(text.target.value);
-        const filteredData = data&&data.filter(newData => newData.state === filterValue );
-        setData(filteredData);
-    };
     console.log('======filterValue===', filterValue);
 
     useEffect(() => {
@@ -247,7 +242,7 @@ const Delivery = () => {
                             <div className='filter'>
                                 <Form.Group className="my-3 text-end">
                                     <label>Filter: </label>
-                                    <select name='value' onChange={handleFilterChange} className='ml-3'>
+                                    <select name='value' onChange={(e) => setFilterValue(e.target.value)} className='ml-3'>
                                         <option value='all'>All</option>
                                         <option value='pending'>Pending</option>
                                         <option value='assigned'>Assigned</option>
@@ -262,7 +257,7 @@ const Delivery = () => {
                                         <tr>
                                             <th scope="col">#</th>
                                             {/* <th scope="col">Res. Identity</th> */}
-                                            <th scope="col">Id</th>
+                                            {/* <th scope="col">Id</th> */}
                                             <th scope="col">Creation Date</th>
                                             <th scope="col">State</th>
                                             <th scope="col">Pickup</th>
@@ -274,13 +269,15 @@ const Delivery = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white">
-                                        {data&&data.map((delivery, index) => (
+                                        {data&&data
+                                        .filter(d => filterValue && filterValue !== "all" ? d.state === filterValue : d )
+                                        .map((delivery, index) => (
                                             <tr key={index+1}>
                                                 <th scope="row">{index+1} 
                                                     {/* {delivery.created_at.seconds} */}
                                                     <span className="fa fa-bell-o alert-display mr-1"></span>
                                                 </th>
-                                                <td><a href={reverse(routes.getDelivery, { id: delivery.id })}>{delivery.id}</a></td>
+                                                {/* <td><a href={reverse(routes.getDelivery, { id: delivery.id })}>{delivery.id}</a></td> */}
                                                 <td>{moment(delivery.creation_date).format('DD/MM/YYYY')}</td>
                                                 <td>{delivery.state}</td>
                                                 <td>
@@ -293,6 +290,13 @@ const Delivery = () => {
                                                 </td>
                                                 <td>{delivery.zone_id}</td>
                                                 <td>
+                                                    <a 
+                                                        href={reverse(routes.getDelivery, { id: delivery.id })} 
+                                                        className='btn btn-warning px-2'
+                                                        style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
+                                                    >
+                                                        <i className='fa fa-eye'></i> View
+                                                    </a>
                                                     <button 
                                                         type="button" 
                                                         className="btn btn-danger" 

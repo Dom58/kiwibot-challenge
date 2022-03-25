@@ -43,7 +43,7 @@ export default class DeliveryController {
     static async getAllDeliveries(req, res) {
         let responseData = [];
         firestore.collection('deliveries')
-            .orderBy('creation_date', 'desc')
+            .orderBy('created_at', 'desc')
             .get()
             .then(data => {
                 if (data.empty) {
@@ -59,8 +59,7 @@ export default class DeliveryController {
                             creation_date: doc.data().creation_date,
                             pickup: doc.data().pickup,
                             dropoff: doc.data().dropoff,
-                            created_at: doc.data().created_at,
-                            // created_at: moment(doc.data().created_at.seconds).toISOString(),
+                            created_at: doc.data().created_at.toDate()
                         });
                     });
                     return res.status(200).json({ 

@@ -13,7 +13,7 @@ const About = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">
-                            <h1>About Us</h1>
+                            <h1>About Kiwibot Challenge </h1>
                             <p><Link to={routes.home}>Return to Homepage</Link></p>
                         </div>
                     </div>
