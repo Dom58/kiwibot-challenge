@@ -3,6 +3,7 @@ const routes = {
     about: '/about',
     deliveries: "/deliveries",
     bots: "/bots",
+    getDelivery: "/deliveries/:id",
     notFound: "/not-found",
 }
 

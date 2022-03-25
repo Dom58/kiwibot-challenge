@@ -1,0 +1,16 @@
+.sort {
+    font-weight: bold;
+    color: #121f3e;
+}
+
+.filter {
+    padding: 2px;
+    margin-top: -50px;
+    font-weight: bold;
+}
+
+.filter .text-end label {
+    color: #121f3e;
+    margin-right: 3px;
+    padding: 1px;
+}

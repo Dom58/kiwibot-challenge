@@ -1,0 +1,49 @@
+.alert-display {
+    color: red;
+    font-size: 20px;
+    -webkit-transform: rotate(20deg); /* text transform */
+    -moz-transform: rotate(20deg);
+    -ms-transform: rotate(20deg);
+    -o-transform: rotate(20deg);
+    transform: rotate(20deg);
+    background: -webkit-linear-gradient(#c03d3d, #f31919); /* gradient */
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* text-shadow: 1px 1px 2px #f31919, 0 0 1em #312e2c, 0 0 0.2em #20201e; */
+
+    animation: fadeIn infinite 1.3s;
+    -webkit-animation: fadeIn infinite 1.3s;
+    -moz-animation: fadeIn infinite 1.3s;
+    -o-animation: fadeIn infinite 1.3s;
+    -ms-animation: fadeIn infinite 1.3s;
+}
+
+@keyframes fadeIn {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+  }
+  
+  @-moz-keyframes fadeIn {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+  }
+  
+  @-o-keyframes fadeIn {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+  }
+  
+  @-ms-keyframes fadeIn {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+  }
