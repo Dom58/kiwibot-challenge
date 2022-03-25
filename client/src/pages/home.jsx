@@ -1,7 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { generatePageTitle } from '../utils/generatePageTitle';
-import routes from '../config/names';
 import Client from '../layout/client';
 
 const Home = () => {
@@ -85,7 +83,7 @@ const Home = () => {
                             <a href='https://technical-test-apis.web.app'>https://technical-test-apis.web.app</a>
 
                             <h1>## Author</h1>
-                            Dominique Ndahimana
+                            2022&copy; by Dominique Ndahimana
 
                         </div>
                     </div>

@@ -120,7 +120,7 @@ const Bots = () => {
             <main>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-8">
+                        <div className="col-md-7">
                             <h5 className="font-weight-bold mt-5">List of Bots</h5>
                             <hr />
                             <div className="table-responsive mt-3" id="tableContainer">
@@ -128,8 +128,7 @@ const Bots = () => {
                                     <thead className="thead-dark">
                                         <tr>
                                             <th scope="col">#</th>
-                                            {/* <th scope="col">Res. Identity</th> */}
-                                            <th scope="col">Id</th>
+                                            {/* <th scope="col">Id</th> */}
                                             <th scope="col">status</th>
                                             <th scope="col">Location</th>
                                             <th scope="col">Zone Id</th>
@@ -140,7 +139,7 @@ const Bots = () => {
                                         {data&&data.map((bot, index) => (
                                             <tr key={index+1}>
                                                 <th scope="row">{index+1}</th>
-                                                <td>{bot.id}</td>
+                                                {/* <td>{bot.id}</td> */}
                                                 <td>{bot.status}</td>
                                                 <td>
                                                     {bot.location.dropoff_lat}(Lat) <br />
@@ -194,7 +193,7 @@ const Bots = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-4" style={{backgroundColor: '#f0ecec'}}>
+                        <div className="col-md-5" style={{backgroundColor: '#f0ecec'}}>
                             <h2 className="font-weight-bold mt-3 text-center">CREATE A BOT</h2>
                             <div className="d-flex flex-column justify-content-center text-bold p-3">
                                 <Form noValidate validated={validated} onSubmit={handleSubmit}>

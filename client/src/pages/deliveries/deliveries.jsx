@@ -20,10 +20,6 @@ const fetchBotsData = async () => {
     return await axios.get(`${backendAPI}/bots`);
 }
 
-// const getHoursInDate = (date) => {
-//     return new Date().getMinutes();
-// }
-
 const Delivery = () => {
     generatePageTitle('Deliveries');
     const [data, setData ] = useState([]);
@@ -202,12 +198,10 @@ const Delivery = () => {
 	};
 
     const handleDataSorting = (order) => {
-        const sortedData = data&&data.sort((a, b) => order === 'desc' ? (new Date(b.creation_date) - new Date(a.creation_date)) :  (new Date(a.creation_date) - new Date(b.creation_date)));
+      const sortedData = data&&data.sort((a, b) =>(new Date(order === 'asc' ?a.created_at:b.created_at) - new Date( order === 'desc' ?a.created_at:b.created_at)));
         setData(sortedData);
         setSortingOrder(order);
     }
-
-    console.log('======filterValue===', filterValue);
 
     useEffect(() => {
         if(data.length === 0) {
@@ -229,7 +223,7 @@ const Delivery = () => {
             <main>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-8  col-sm-12 col-xs-12">
+                        <div className="col-md-8 col-sm-12 col-xs-12">
                             <h5 className="font-weight-bold mt-5">List of Deliveries</h5>
                             <hr />
                             <div>
@@ -256,216 +250,217 @@ const Delivery = () => {
                                     <thead className="thead-dark">
                                         <tr>
                                             <th scope="col">#</th>
-                                            {/* <th scope="col">Res. Identity</th> */}
-                                            {/* <th scope="col">Id</th> */}
                                             <th scope="col">Creation Date</th>
                                             <th scope="col">State</th>
                                             <th scope="col">Pickup</th>
                                             <th scope="col">Drop Off</th>
                                             <th scope="col">Zone Id</th>
-                                            {/* <th scope="col">Created By</th>
-                                            <th scope="col">Created At</th> */}
                                             <th scope="col">Options</th>
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white">
                                         {data&&data
-                                        .filter(d => filterValue && filterValue !== "all" ? d.state === filterValue : d )
-                                        .map((delivery, index) => (
-                                            <tr key={index+1}>
-                                                <th scope="row">{index+1} 
-                                                    {/* {delivery.created_at.seconds} */}
-                                                    <span className="fa fa-bell-o alert-display mr-1"></span>
-                                                </th>
-                                                {/* <td><a href={reverse(routes.getDelivery, { id: delivery.id })}>{delivery.id}</a></td> */}
-                                                <td>{moment(delivery.creation_date).format('DD/MM/YYYY')}</td>
-                                                <td>{delivery.state}</td>
-                                                <td>
-                                                    {delivery.pickup.pickup_lat}(Lat) <br />
-                                                    {delivery.pickup.pickup_lon}(Lon)
-                                                </td>
-                                                <td>
-                                                    {delivery.dropoff.dropoff_lat ? delivery.dropoff.dropoff_lat: 0}(Lat) <br />
-                                                    {delivery.dropoff.dropoff_lon ? delivery.dropoff.dropoff_lon: 0}(Lon)
-                                                </td>
-                                                <td>{delivery.zone_id}</td>
-                                                <td>
-                                                    <a 
-                                                        href={reverse(routes.getDelivery, { id: delivery.id })} 
-                                                        className='btn btn-warning px-2'
-                                                        style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
-                                                    >
-                                                        <i className='fa fa-eye'></i> View
-                                                    </a>
-                                                    <button 
-                                                        type="button" 
-                                                        className="btn btn-danger" 
-                                                        style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
-                                                        onClick={() => toggleDelete(delivery.id)}
-                                                    >
-                                                        Delete
-                                                    </button>  
+                                            .filter(d => filterValue && filterValue !== "all" ? d.state === filterValue : d )
+                                            .map((delivery, index) => {
+                                                const deliveryDate = moment(delivery.created_at)
+                                                const currentDate = moment(new Date())
+                                                const isNewDelivery =currentDate.diff(deliveryDate,'minute') >= 5
+                                                
+                                                return (
+                                                    <tr key={index+1}>
+                                                        <th scope="row">{index+1} 
+                                                            {delivery.created_at.seconds}
+                                                            {isNewDelivery && delivery.state ==="pending"  && <span className="fa fa-bell-o alert-display mr-1"></span>}
+                                                        </th>
+                                                        <td>{moment(delivery.creation_date).format('DD/MM/YYYY')}</td>
+                                                        <td>{delivery.state}</td>
+                                                        <td>
+                                                            {delivery.pickup.pickup_lat}(Lat) <br />
+                                                            {delivery.pickup.pickup_lon}(Lon)
+                                                        </td>
+                                                        <td>
+                                                            {delivery.dropoff.dropoff_lat ? delivery.dropoff.dropoff_lat: 0}(Lat) <br />
+                                                            {delivery.dropoff.dropoff_lon ? delivery.dropoff.dropoff_lon: 0}(Lon)
+                                                        </td>
+                                                        <td>{delivery.zone_id}</td>
+                                                        <td>
+                                                            <a 
+                                                                className='btn btn-warning px-3'
+                                                                style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
+                                                                href={reverse(routes.getDelivery, { id: delivery.id })}
+                                                            >
+                                                                View
+                                                            </a>
+                                                            <button 
+                                                                type="button" 
+                                                                className="btn btn-danger" 
+                                                                style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
+                                                                onClick={() => toggleDelete(delivery.id)}
+                                                            >
+                                                                Delete
+                                                            </button>  
 
-                                                    {delivery.state&&delivery.state === 'pending' && (
-                                                        <button 
-                                                            type="button" 
-                                                            className="btn btn-primary" 
-                                                            style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
-                                                            onClick={() => toggleAssign(delivery.id)}
-                                                        >
-                                                            Assign_To_Bot
-                                                        </button>
-                                                    )}
-                                                    {delivery.state&&delivery.state === 'assigned' && (
-                                                        <button 
-                                                            type="button" 
-                                                            className="btn btn-success" 
-                                                            style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
-                                                            onClick={() => toggleMakeTransit(delivery.id)}
-                                                        >
-                                                            Make_Transit
-                                                        </button>
-                                                    )}
+                                                            {delivery.state&&delivery.state === 'pending' && (
+                                                                <button 
+                                                                    type="button" 
+                                                                    className="btn btn-primary" 
+                                                                    style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
+                                                                    onClick={() => toggleAssign(delivery.id)}
+                                                                >
+                                                                    Assign_To_Bot
+                                                                </button>
+                                                            )}
+                                                            {delivery.state&&delivery.state === 'assigned' && (
+                                                                <button 
+                                                                    type="button" 
+                                                                    className="btn btn-success" 
+                                                                    style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
+                                                                    onClick={() => toggleMakeTransit(delivery.id)}
+                                                                >
+                                                                    Make_Transit
+                                                                </button>
+                                                            )}
 
-                                                    {delivery.state&&delivery.state === 'in_transit' && (
-                                                        <button 
-                                                            type="button" 
-                                                            className="btn btn-info" 
-                                                            style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
-                                                            onClick={() => toggleDelivery(delivery.id)}
-                                                        >
-                                                            Finish_Deliverying
-                                                        </button>
-                                                    )}
-                                                </td>
+                                                            {delivery.state&&delivery.state === 'in_transit' && (
+                                                                <button 
+                                                                    type="button" 
+                                                                    className="btn btn-info" 
+                                                                    style={{padding: '1px 5px', fontSize: '12px', lineHeight: 1.5, borderRadius: '3px'}}
+                                                                    onClick={() => toggleDelivery(delivery.id)}
+                                                                >
+                                                                    Finish_Deliverying
+                                                                </button>
+                                                            )}
+                                                        </td>
 
-                                                {deleteModal && (
-                                                    <Modal show={deleteModal} onHide={() => closeDelete()} className="mt-5" key={delivery.id}>
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title id='contained-modal-title-vcenter'>
-                                                                Are you sure you want to detete this Delivery?
-                                                            </Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Footer>
-                                                            <Button
-                                                                className='btn btn-sm'
-                                                                style={{ backgroundColor: '#c3c3c3', border: 'none' }}
-                                                                onClick={() => closeDelete()}
-                                                            >
-                                                                No
-                                                            </Button>{' '}
-                                                            <Button
-                                                                className='btn btn-primary btn-sm'
-                                                                onClick={() => deleteADelivery()}
-                                                            >
-                                                                Yes
-                                                            </Button>{' '}
-                                                        </Modal.Footer>
-                                                    </Modal>
-                                                )}
+                                                        {deleteModal && (
+                                                            <Modal show={deleteModal} onHide={() => closeDelete()} className="mt-5" key={delivery.id}>
+                                                                <Modal.Header closeButton>
+                                                                    <Modal.Title id='contained-modal-title-vcenter'>
+                                                                        Are you sure you want to detete this Delivery?
+                                                                    </Modal.Title>
+                                                                </Modal.Header>
+                                                                <Modal.Footer>
+                                                                    <Button
+                                                                        className='btn btn-sm'
+                                                                        style={{ backgroundColor: '#c3c3c3', border: 'none' }}
+                                                                        onClick={() => closeDelete()}
+                                                                    >
+                                                                        No
+                                                                    </Button>{' '}
+                                                                    <Button
+                                                                        className='btn btn-primary btn-sm'
+                                                                        onClick={() => deleteADelivery()}
+                                                                    >
+                                                                        Yes
+                                                                    </Button>{' '}
+                                                                </Modal.Footer>
+                                                            </Modal>
+                                                        )}
 
-                                                {/* Assign a bot to a derivery */}
-                                                {assignModal && (
-                                                    <Modal show={assignModal} onHide={() => setAssignModal(false)} className="mt-5" key={delivery.id}>
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title id='contained-modal-title-vcenter'>
-                                                                Assign Bot to a  Delivery?
-                                                            </Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                            <label htmlFor="">Assign a Bots</label>
-                                                            <select name="botId" className='form-control' onChange={handleChange}>
-                                                                <option>Select bot....</option>
-                                                                {botData&&botData
-                                                                    .filter(bot => bot.status === 'available')
-                                                                    .map((bot, i) => {
-                                                                    return (
-                                                                        <>
-                                                                        <option value={bot.id} key={i+1}>Bot ID: {bot.id} | Zone id: {bot.zone_id}</option>
-                                                                        </>
-                                                                        );
-                                                                    })
-                                                                }
-                                                            </select>
-                                                            {botData&&botData.filter(bot => bot.status === 'available').length === 0 && (<p style={{color: 'brown'}}>No Available bot!</p>)}
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <Button
-                                                                className='btn btn-sm'
-                                                                style={{ backgroundColor: '#c3c3c3', border: 'none' }}
-                                                                onClick={() => setAssignModal(false)}
-                                                            >
-                                                                No
-                                                            </Button>{' '}
-                                                            <Button
-                                                                className='btn btn-primary btn-sm'
-                                                                onClick={() => assignADelivery()}
-                                                            >
-                                                                Assign Bot
-                                                            </Button>{' '}
-                                                        </Modal.Footer>
-                                                    </Modal>
-                                                )}
+                                                        {/* Assign a bot to a derivery */}
+                                                        {assignModal && (
+                                                            <Modal show={assignModal} onHide={() => setAssignModal(false)} className="mt-5" key={delivery.id}>
+                                                                <Modal.Header closeButton>
+                                                                    <Modal.Title id='contained-modal-title-vcenter'>
+                                                                        Assign Bot to a  Delivery?
+                                                                    </Modal.Title>
+                                                                </Modal.Header>
+                                                                <Modal.Body>
+                                                                    <label htmlFor="">Assign a Bots</label>
+                                                                    <select name="botId" className='form-control' onChange={handleChange}>
+                                                                        <option>Select bot....</option>
+                                                                        {botData&&botData
+                                                                            .filter(bot => bot.status === 'available')
+                                                                            .map((bot, i) => {
+                                                                            return (
+                                                                                <>
+                                                                                <option value={bot.id} key={i+1}>Bot ID: {bot.id} | Zone id: {bot.zone_id}</option>
+                                                                                </>
+                                                                                );
+                                                                            })
+                                                                        }
+                                                                    </select>
+                                                                    {botData&&botData.filter(bot => bot.status === 'available').length === 0 && (<p style={{color: 'brown'}}>No Available bot!</p>)}
+                                                                </Modal.Body>
+                                                                <Modal.Footer>
+                                                                    <Button
+                                                                        className='btn btn-sm'
+                                                                        style={{ backgroundColor: '#c3c3c3', border: 'none' }}
+                                                                        onClick={() => setAssignModal(false)}
+                                                                    >
+                                                                        No
+                                                                    </Button>{' '}
+                                                                    <Button
+                                                                        className='btn btn-primary btn-sm'
+                                                                        onClick={() => assignADelivery()}
+                                                                    >
+                                                                        Assign Bot
+                                                                    </Button>{' '}
+                                                                </Modal.Footer>
+                                                            </Modal>
+                                                        )}
 
-                                                {/* Make Transit a bot to a derivery */}
-                                                {makeTransitModal && (
-                                                    <Modal show={makeTransitModal} onHide={() => setMakeTransitModal(false)} className="mt-5" key={delivery.id}>
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title id='contained-modal-title-vcenter'>
-                                                                Make Assigned Delivery In Transit
-                                                            </Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                           Are you sure you want to make this delivery with <strong>{deliveryId}</strong> in Transit?
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <Button
-                                                                className='btn btn-sm'
-                                                                style={{ backgroundColor: '#c3c3c3', border: 'none' }}
-                                                                onClick={() => setMakeTransitModal(false)}
-                                                            >
-                                                                No
-                                                            </Button>{' '}
-                                                            <Button
-                                                                className='btn btn-primary btn-sm'
-                                                                onClick={() => makeADelivery()}
-                                                            >
-                                                                Submit
-                                                            </Button>{' '}
-                                                        </Modal.Footer>
-                                                    </Modal>
-                                                )}
+                                                        {/* Make Transit a bot to a derivery */}
+                                                        {makeTransitModal && (
+                                                            <Modal show={makeTransitModal} onHide={() => setMakeTransitModal(false)} className="mt-5" key={delivery.id}>
+                                                                <Modal.Header closeButton>
+                                                                    <Modal.Title id='contained-modal-title-vcenter'>
+                                                                        Make Assigned Delivery In Transit
+                                                                    </Modal.Title>
+                                                                </Modal.Header>
+                                                                <Modal.Body>
+                                                                Are you sure you want to make this delivery with <strong>{deliveryId}</strong> in Transit?
+                                                                </Modal.Body>
+                                                                <Modal.Footer>
+                                                                    <Button
+                                                                        className='btn btn-sm'
+                                                                        style={{ backgroundColor: '#c3c3c3', border: 'none' }}
+                                                                        onClick={() => setMakeTransitModal(false)}
+                                                                    >
+                                                                        No
+                                                                    </Button>{' '}
+                                                                    <Button
+                                                                        className='btn btn-primary btn-sm'
+                                                                        onClick={() => makeADelivery()}
+                                                                    >
+                                                                        Submit
+                                                                    </Button>{' '}
+                                                                </Modal.Footer>
+                                                            </Modal>
+                                                        )}
 
-                                                {/* Make Transit a bot to a derivery */}
-                                                {makeDeliveryModal && (
-                                                    <Modal show={makeDeliveryModal} onHide={() => setMakeDeliveryModal(false)} className="mt-5" key={delivery.id}>
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title id='contained-modal-title-vcenter'>
-                                                                End Up Delivery
-                                                            </Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                            Are you sure you want to endup delivery with <strong>{deliveryId}</strong>?
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <Button
-                                                                className='btn btn-sm'
-                                                                style={{ backgroundColor: '#c3c3c3', border: 'none' }}
-                                                                onClick={() => setMakeDeliveryModal(false)}
-                                                            >
-                                                                No
-                                                            </Button>{' '}
-                                                            <Button
-                                                                className='btn btn-primary btn-sm'
-                                                                onClick={() => finishADelivery()}
-                                                            >
-                                                                Submit
-                                                            </Button>{' '}
-                                                        </Modal.Footer>
-                                                    </Modal>
-                                                )}
-                                            </tr>
-                                        ))}
+                                                        {/* Make Transit a bot to a derivery */}
+                                                        {makeDeliveryModal && (
+                                                            <Modal show={makeDeliveryModal} onHide={() => setMakeDeliveryModal(false)} className="mt-5" key={delivery.id}>
+                                                                <Modal.Header closeButton>
+                                                                    <Modal.Title id='contained-modal-title-vcenter'>
+                                                                        End Up Delivery
+                                                                    </Modal.Title>
+                                                                </Modal.Header>
+                                                                <Modal.Body>
+                                                                    Are you sure you want to endup delivery with <strong>{deliveryId}</strong>?
+                                                                </Modal.Body>
+                                                                <Modal.Footer>
+                                                                    <Button
+                                                                        className='btn btn-sm'
+                                                                        style={{ backgroundColor: '#c3c3c3', border: 'none' }}
+                                                                        onClick={() => setMakeDeliveryModal(false)}
+                                                                    >
+                                                                        No
+                                                                    </Button>{' '}
+                                                                    <Button
+                                                                        className='btn btn-primary btn-sm'
+                                                                        onClick={() => finishADelivery()}
+                                                                    >
+                                                                        Submit
+                                                                    </Button>{' '}
+                                                                </Modal.Footer>
+                                                            </Modal>
+                                                        )}
+                                                    </tr>
+                                            )}
+                                        )}
                                         {error&&(
                                             <tr>
                                                 <td colSpan={8}><span style={{color: 'brown'}}>{error&&error}</span></td>
@@ -477,7 +472,7 @@ const Delivery = () => {
                         </div>
 
                         <div className="col-md-4 col-sm-12 col-xs-12" style={{backgroundColor: '#f0ecec'}}>
-                            <h2 className="font-weight-bold mb-1 mt-3 text-center">CREATE A DELIVERY</h2>
+                            <h2 className="font-weight-bold mb-1 mt-3 text-center">CREATE NEW DELIVERY</h2>
                             <div className="d-flex flex-column justify-content-center text-bold p-3">
                                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                                     <Form.Group className="my-3 text-left">

@@ -59,7 +59,8 @@ export default class DeliveryController {
                             creation_date: doc.data().creation_date,
                             pickup: doc.data().pickup,
                             dropoff: doc.data().dropoff,
-                            created_at: doc.data().created_at.toDate()
+                            created_at: doc.data().created_at.toDate(),
+                            // created_at: moment(doc.data().created_at.seconds).toISOString(),
                         });
                     });
                     return res.status(200).json({ 
